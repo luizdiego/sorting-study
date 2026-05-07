@@ -12,6 +12,9 @@ A simple, interactive web-based visualizer for the QuickSort algorithm. This pro
 * **Custom Range:** Generates random integer values between 1 and 10.
 * **No Dependencies:** Built with pure HTML, CSS, and Vanilla JavaScript.
 
+## Try-me online
+Link to the published version: https://luizdiego.github.io/sorting-study/quick-sort/
+
 ## How to Run
 
 1. Clone this repository or download the `index.html` file.
