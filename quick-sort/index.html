@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador Quicksort (1 a 10)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+            margin-top: 50px;
+        }
+
+        #container-barras {
+            display: flex;
+            align-items: flex-end;
+            height: 300px;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .barra {
+            width: 40px;
+            background-color: #3498db;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s ease, background-color 0.3s ease; 
+        }
+
+        .pivo { background-color: #f1c40f !important; }
+        .comparando { background-color: #e74c3c !important; }
+        .ordenado { background-color: #2ecc71 !important; }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Visualização do Quicksort (Valores de 1 a 10)</h2>
+    <div id="container-barras"></div>
+    
+    <div>
+        <button id="btn-gerar" onclick="gerarBarras()">Gerar Nova Lista</button>
+        <button id="btn-ordenar" onclick="iniciarOrdenacao()">Ordenar (Quicksort)</button>
+    </div>
+
+    <script>
+        const container = document.getElementById('container-barras');
+        const totalBarras = 10;
+        const tempoEspera = 1000; 
+        let arrayValores = [];
+
+        function gerarBarras() {
+            container.innerHTML = '';
+            arrayValores = [];
+            for (let i = 0; i < totalBarras; i++) {
+                // NOVO: Gera números inteiros entre 1 e 10
+                let valor = Math.floor(Math.random() * 10) + 1; 
+                arrayValores.push(valor);
+
+                let barra = document.createElement('div');
+                barra.classList.add('barra');
+                // NOVO: Multiplicador alterado para 25. Assim, o valor 10 terá 250px de altura.
+                barra.style.height = `${valor * 25}px`; 
+                barra.innerText = valor;
+                barra.id = `barra-${i}`;
+                container.appendChild(barra);
+            }
+        }
+
+        function esperar() {
+            return new Promise(resolve => setTimeout(resolve, tempoEspera));
+        }
+
+        async function trocar(i, j) {
+            let temp = arrayValores[i];
+            arrayValores[i] = arrayValores[j];
+            arrayValores[j] = temp;
+
+            let barraI = document.getElementById(`barra-${i}`);
+            let barraJ = document.getElementById(`barra-${j}`);
+
+            let alturaTemp = barraI.style.height;
+            let textoTemp = barraI.innerText;
+
+            barraI.style.height = barraJ.style.height;
+            barraI.innerText = barraJ.innerText;
+
+            barraJ.style.height = alturaTemp;
+            barraJ.innerText = textoTemp;
+
+            await esperar();
+        }
+
+        async function particionar(baixo, alto) {
+            let pivo = arrayValores[alto]; 
+            let barraPivo = document.getElementById(`barra-${alto}`);
+            barraPivo.classList.add('pivo'); 
+
+            let i = baixo - 1;
+
+            for (let j = baixo; j < alto; j++) {
+                let barraAtual = document.getElementById(`barra-${j}`);
+                barraAtual.classList.add('comparando'); 
+                
+                await esperar(); 
+
+                if (arrayValores[j] < pivo) {
+                    i++;
+                    if (i !== j) {
+                        await trocar(i, j); 
+                    }
+                }
+                barraAtual.classList.remove('comparando'); 
+            }
+
+            if (i + 1 !== alto) {
+                await trocar(i + 1, alto);
+            }
+            
+            barraPivo.classList.remove('pivo'); 
+            return i + 1;
+        }
+
+        async function quicksortInPlace(baixo, alto) {
+            if (baixo < alto) {
+                let indicePivo = await particionar(baixo, alto);
+                
+                document.getElementById(`barra-${indicePivo}`).classList.add('ordenado');
+
+                await quicksortInPlace(baixo, indicePivo - 1);
+                await quicksortInPlace(indicePivo + 1, alto);
+            } else if (baixo >= 0 && alto >= 0 && baixo < arrayValores.length && alto < arrayValores.length) {
+                if (baixo === alto) {
+                    document.getElementById(`barra-${baixo}`).classList.add('ordenado');
+                }
+            }
+        }
+
+        async function iniciarOrdenacao() {
+            document.getElementById('btn-gerar').disabled = true;
+            document.getElementById('btn-ordenar').disabled = true;
+
+            await quicksortInPlace(0, arrayValores.length - 1);
+
+            for(let i = 0; i < arrayValores.length; i++) {
+                document.getElementById(`barra-${i}`).classList.add('ordenado');
+            }
+
+            document.getElementById('btn-gerar').disabled = false;
+            document.getElementById('btn-ordenar').disabled = false;
+        }
+
+        gerarBarras();
+    </script>
+</body>
+</html>
