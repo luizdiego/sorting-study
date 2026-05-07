@@ -13,7 +13,7 @@ A simple, interactive web-based visualizer for the QuickSort algorithm. This pro
 * **No Dependencies:** Built with pure HTML, CSS, and Vanilla JavaScript.
 
 ## Try-me online
-Link to the published version: https://luizdiego.github.io/sorting-study/quick-sort/
+🚀 **[Click here to view this Quicksort running live!]([https://seu-usuario.github.io/nome-do-repositorio/sorting-study/quick-sort/](https://luizdiego.github.io/sorting-study/quick-sort/))**
 
 ## How to Run
 
