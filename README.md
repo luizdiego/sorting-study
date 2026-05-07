@@ -20,5 +20,6 @@ A real-time, interactive visualization of the QuickSort algorithm. It uses a bar
     └── quick-sort/
         ├── index.html        # The visual tool
         └── README.md         # Detailed project info)
-* **Project Details:** You can find the specific documentation, logic explanation, and source code in the subfolder README:
-    * [QuickSort Documentation](./quick-sort/README.md)
+```
+**Project Details:** You can find the specific documentation, logic explanation, and source code in the subfolder README:
+* [QuickSort Documentation](./quick-sort/README.md)
